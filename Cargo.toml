@@ -1,0 +1,44 @@
+[package]
+name = "chronos-feat"
+version = "0.1.0"
+edition = "2021"
+authors = ["koushik4475 <koushik4475@gmail.com>"]
+description = "Ultra-Low-Latency Distributed Real-Time ML Feature Store with Point-in-Time AS-OF Joins"
+license = "Apache-2.0"
+repository = "https://github.com/ER-brocode/chronos-feat"
+keywords = ["feature-store", "machine-learning", "as-of-join", "realtime", "parquet"]
+categories = ["database-implementations", "science", "development-tools"]
+
+[dependencies]
+tokio = { version = "1.38", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+dashmap = "5.5"
+parking_lot = "0.12"
+bytes = "1.6"
+futures = "0.3"
+uuid = { version = "1.8", features = ["v4", "serde"] }
+rand = "0.8"
+regex = "1.10"
+axum = { version = "0.7", features = ["macros"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+arrow = { version = "51.0", features = ["prettyprint"] }
+parquet = { version = "51.0", features = ["arrow"] }
+tempfile = "3.10"
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[[bin]]
+name = "chronos-server"
+path = "src/main.rs"
+
+[lib]
+name = "chronos_feat"
+path = "src/lib.rs"
