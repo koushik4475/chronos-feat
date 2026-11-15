@@ -1,6 +1,9 @@
 <div align="center">
 
-# ⚡ Chronos-Feat
+# Chronos-Feat | Real-Time Machine Learning Feature Store in Rust
+
+Chronos-Feat is a Rust project for serving and computing features for real-time machine-learning systems. The documented design includes streaming event ingestion, sliding-window aggregations, point-in-time joins to avoid look-ahead leakage, and columnar storage formats such as Apache Arrow and Parquet. It is relevant to ML platform engineers researching online feature stores and reproducible feature computation.
+
 ### Ultra-Low-Latency Distributed Real-Time ML Feature Store
 #### Point-in-Time AS-OF Joins • Sub-Millisecond P99 Inference • Dual-Tier Lakehouse Bridge
 
