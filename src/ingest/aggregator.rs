@@ -19,6 +19,8 @@ pub enum AggregationOp {
 
 /// Continuous exponential decay aggregator
 /// Weight decays as e^(-lambda * dt) where lambda = ln(2) / half_life
+const UNINITIALIZED_TIMESTAMP: i64 = i64::MIN;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ExponentialDecayState {
     pub half_life_micros: f64,
@@ -34,12 +36,14 @@ impl ExponentialDecayState {
             half_life_micros,
             lambda,
             accumulated_value: 0.0,
-            last_timestamp: 0,
+            // Zero is a valid Unix timestamp; use a dedicated sentinel so
+            // events at the epoch are not mistaken for an uninitialized state.
+            last_timestamp: UNINITIALIZED_TIMESTAMP,
         }
     }
 
     pub fn update(&mut self, timestamp: i64, value: f64) {
-        if self.last_timestamp == 0 {
+        if self.last_timestamp == UNINITIALIZED_TIMESTAMP {
             self.accumulated_value = value;
             self.last_timestamp = timestamp;
             return;
@@ -59,7 +63,7 @@ impl ExponentialDecayState {
     }
 
     pub fn current_value(&self, current_time: i64) -> f64 {
-        if self.last_timestamp == 0 {
+        if self.last_timestamp == UNINITIALIZED_TIMESTAMP {
             return 0.0;
         }
         if current_time <= self.last_timestamp {
