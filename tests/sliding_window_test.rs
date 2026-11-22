@@ -154,3 +154,18 @@ fn test_point_in_time_asof_join_strict_temporal_leak_prevention() {
     assert_eq!(join_exact.feature_timestamp, Some(300_000_000));
     assert_eq!(join_exact.features.get("risk_score"), Some(&FeatureValue::Float(0.98)));
 }
+
+
+#[test]
+fn test_exponential_decay_treats_epoch_zero_as_a_valid_timestamp() {
+    let mut decay = ExponentialDecayState::new(10_000_000.0);
+
+    decay.update(0, 100.0);
+    assert_eq!(decay.current_value(0), 100.0);
+
+    // Five seconds into a ten-second half-life, the first value is halved
+    // exponentially before the new event is added.
+    decay.update(5_000_000, 50.0);
+    let expected = 100.0 * 0.5f64.sqrt() + 50.0;
+    assert!((decay.current_value(5_000_000) - expected).abs() < 1e-6);
+}
